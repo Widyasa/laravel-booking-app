@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Carbrand;
+use Illuminate\Http\Request;
 
 class CarBrandRepository
 {
@@ -12,7 +13,12 @@ class CarBrandRepository
 
     public function findAll()
     {
-        return $this->carBrand->latest()->get();
+        $search = \request('search');
+        return $this->carBrand
+            ->where('name', 'like', '%' . $search . '%')
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
     }
     public function findById(int $type_id): Carbrand {
         return $this->carBrand->where('id', $type_id)->first();

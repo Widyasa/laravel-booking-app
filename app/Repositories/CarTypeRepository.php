@@ -12,7 +12,7 @@ class CarTypeRepository
 
     public function findAll()
     {
-        return $this->carType->latest()->get();
+        return $this->carType->latest()->paginate(10)->withQueryString();
     }
     public function findById(int $type_id): CarType {
         return $this->carType->where('id', $type_id)->first();
