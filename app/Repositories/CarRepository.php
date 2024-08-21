@@ -52,7 +52,7 @@ class CarRepository {
             if (isset($request["image"])) {
                 $this->uploadFile->deleteExistFile("cars/thumbnails/$car->image");
 
-                $filename = $this->uploadFile->uploadSingleFile($request['image'], 'cars/thumbnails');
+                $filename = $this->uploadFile->uploadSingleFile($request['image'], 'cars/thumbnails/');
                 $request['image'] = $filename;
             }
 
