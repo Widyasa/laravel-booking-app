@@ -26,7 +26,7 @@ class AuthController extends Controller
             'c_password' => 'required|same:password',
         ]);
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+            return response()->json($validator->errors());
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
@@ -57,7 +57,7 @@ class AuthController extends Controller
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
             if (Auth::user()->role == 'customer') {
-                $user = this->customer->with('customer_user')->where('user_id', Auth::user()->id)->get();
+                $user = $this->customer->with('customer_user')->where('user_id', Auth::user()->id)->get();
             } else {
                 $user = Auth::user();
             }

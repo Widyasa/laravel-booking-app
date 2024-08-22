@@ -23,8 +23,9 @@ class UploadFile
 
     public function deleteExistFile($path)
     {
-        if(File::exists("uploads/$path") ) {
-            File::delete("uploads/$path");
+//        dd($path);
+        if(File::exists("$path") ) {
+            File::delete("$path");
         }
     }
 }

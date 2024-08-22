@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Car;
+use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,18 +13,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('customer_id')
+            $table->foreignIdFor(Customer::class)
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignIdFor('car_id')
+            $table->foreignIdFor(Car::class)
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->integer('price');
-            $table->enum('status', ['unpaid', 'half_paid', 'paid'])->default('pending');
+            $table->enum('status', ['unpaid', 'half_paid', 'paid', 'finish', 'canceled'])->default('unpaid');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('payment_proof')->nullable();

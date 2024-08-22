@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarBrandController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarTypeController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,20 +35,31 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::patch('/car/types/{id}', 'update');
             Route::delete('/car/types/{id}', 'delete');
         });
-    });
-    Route::controller(CarBrandController::class)->group(function () {
-        Route::get('/car-brands', 'index');
-        Route::post('/car/brands', 'store');
-        Route::get('/car/brands/{id}', 'show');
-        Route::patch('/car/brands/{id}', 'update');
-        Route::delete('/car/brands/{id}', 'delete');
+        Route::controller(CarBrandController::class)->group(function () {
+            Route::get('/car-brands', 'index');
+            Route::post('/car/brands', 'store');
+            Route::get('/car/brands/{id}', 'show');
+            Route::patch('/car/brands/{id}', 'update');
+            Route::delete('/car/brands/{id}', 'delete');
+        });
+        Route::controller(CarController::class)->group(function () {
+            Route::post('/car', 'store');
+            Route::get('/car/{id}', 'show');
+            Route::post('/car/update/{id}', 'update');
+            Route::delete('/car/{id}', 'delete');
+        });
     });
     Route::controller(CarController::class)->group(function () {
         Route::get('/car', 'index');
-        Route::post('/car', 'store');
-        Route::get('/car/{id}', 'show');
-        Route::post('/car/update/{id}', 'update');
-        Route::delete('/car/{id}', 'delete');
+    });
+    Route::controller(TransactionController::class)->group(function () {
+        Route::get('/transactions', 'index');
+        Route::post('/transactions', 'store');
+        Route::get('/transactions/{id}', 'show');
+        Route::get('/transactions/user', 'showByUser');
+        Route::patch('/transactions/{id}', 'update');
+        Route::post('/transactions/upload/{id}', 'uploadImage');
+//        Route::delete('/car/{id}', 'delete');
     });
 });
 

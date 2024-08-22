@@ -15,6 +15,6 @@ class Transaction extends Model
     }
     public function transaction_car()
     {
-        return $this->belongsTo(User::class, 'car_id', 'id');
+        return $this->belongsTo(Car::class, 'car_id', 'id');
     }
 }
