@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateCarRequest extends FormRequest
+class UploadFileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,10 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required:cars,name|max:100',
-            'license_plate' => "required|max:30",
-            'car_brand_id' => 'required|numeric',
-            'car_type_id' => 'required|numeric',
-            'price_per_day' => 'required|numeric',
-            'car_status' => 'required',
-            'description' => 'required|min:3',
+            'car_id' => 'required|numeric',
+            'image' => 'required|file|image|mimes:png,jpg,jpeg,gif,webp,svg|max:5048'
         ];
     }
-
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
@@ -43,3 +37,4 @@ class UpdateCarRequest extends FormRequest
         ]));
     }
 }
+

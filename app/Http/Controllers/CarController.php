@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Http\Requests\Car\UpdateCarRequest;
+use App\Http\Requests\Car\UploadFileRequest;
 use App\Models\Car;
 use App\Repositories\CarRepository;
 use App\Utils\ApiResponse;
@@ -19,7 +20,7 @@ class CarController extends Controller
     public function index() {
         $cars = $this->car->findAll();
         return ApiResponse::success([
-            'cars' => $cars
+            $cars
         ], 'Fetched', 'Car');
     }
 
@@ -35,17 +36,17 @@ class CarController extends Controller
 
     public function show($id)
     {
-        $brand = $this->car->findById($id);
+        $car = $this->car->findById($id);
         return ApiResponse::success([
-            'data' => $brand
+            'data' => $car
         ], 'Fetched', 'Car');
     }
     public function update(UpdateCarRequest $request, $id)
     {
         try {
-            $brand = $this->car->update($request->validated(), $id);
+            $car = $this->car->update($request->validated(), $id);
             return ApiResponse::success([
-                'data' => $brand
+                'data' => $car
             ], 'Update', 'Car');
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getMessage(), 'Update', 'Car');
@@ -60,6 +61,14 @@ class CarController extends Controller
             ], 'Delete', 'Car');
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getMessage(), 'Delete', 'Car');
+        }
+    }
+    public function uploadImage(UploadFileRequest $request, $id)
+    {
+        try {
+            return $this->car->uploadImage($request->validated(), $id);
+        } catch (\Exception $exception) {
+            return ApiResponse::error($exception->getMessage(), 'Upload', 'Image Car');
         }
     }
 

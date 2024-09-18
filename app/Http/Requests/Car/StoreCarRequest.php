@@ -29,7 +29,6 @@ class StoreCarRequest extends FormRequest
             'price_per_day' => 'required|numeric',
             'car_status' => 'required',
             'description' => 'required|min:3',
-            'image' => 'required|file|image|mimes:png,jpg,jpeg,gif,webp,svg|max:5048',
         ];
     }
 }

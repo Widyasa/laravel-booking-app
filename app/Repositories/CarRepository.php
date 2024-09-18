@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Car;
+use App\Utils\ApiResponse;
 use App\Utils\UploadFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,14 @@ class CarRepository {
 
     public function findAll()
     {
-        return $this->car->latest()->paginate(10)->withQueryString();
+        $search = \request('search');
+        return $this->car->latest()->with(['car_type', 'car_brand'])
+            ->where('name', 'like', '%' . $search . '%')
+            ->orwhere('license_plate', 'like', '%' . $search . '%')
+            ->orwhere('description', 'like', '%' . $search . '%')
+            ->orwhere('car_status', 'like', '%' . $search . '%')
+            ->paginate(10)
+            ->withQueryString();
     }
 
     public function findById(int $car_id): Car
@@ -26,17 +34,9 @@ class CarRepository {
     {
         DB::beginTransaction();
         try {
-            if ($request["image"]) {
-                $filename = $this->uploadFile->uploadSingleFile($request['image'], "cars/thumbnails/");
-                $request['image'] = $filename;
-            }
-
             $car = $this->car->create($request);
-
             DB::commit();
-
             return $car;
-
         } catch (\Exception $e) {
             logger($e->getMessage());
             DB::rollBack();
@@ -45,21 +45,13 @@ class CarRepository {
         }
     }
 
-    public function update(array $request, Car $car)
+    public function update($request, $id): bool
     {
         DB::beginTransaction();
         try {
-            if (isset($request["image"])) {
-                $this->uploadFile->deleteExistFile("cars/thumbnails/$car->image");
-
-                $filename = $this->uploadFile->uploadSingleFile($request['image'], 'cars/thumbnails/');
-                $request['image'] = $filename;
-            }
-
             DB::commit();
-
+            $car = $this->findById($id);
             return $car->update($request);
-
         } catch (\Exception $e) {
             DB::rollBack();
             logger($e->getMessage());
@@ -81,8 +73,29 @@ class CarRepository {
         } catch (\Exception $e) {
             DB::rollBack();
             logger($e->getMessage());
+            return $e->getMessage();
+        }
+    }
 
-            throw $e->getMessage();
+    public function uploadImage($request, $id): \Illuminate\Http\JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $car = Car::findOrFail($id);
+            if (isset($request["image"])) {
+                $this->uploadFile->deleteExistFile($car->image);
+
+                $filename = $this->uploadFile->uploadSingleFile($request['image'], 'cars/image/');
+                $request['image'] = $filename;
+            }
+            $car->update($request);
+            DB::commit();
+
+            return ApiResponse::success([$car], 'Update', 'Car');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logger($e->getMessage());
+            throw $e;
         }
     }
 }

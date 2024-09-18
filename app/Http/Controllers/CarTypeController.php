@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CarType\StoreCarTypeRequest;
 use App\Http\Requests\CarType\UpdateCarTypeRequest;
-use App\Models\CarType;
 use App\Repositories\CarTypeRepository;
 use App\Utils\ApiResponse;
-use Illuminate\Http\Request;
-
 class CarTypeController extends Controller
 {
     public function __construct(
@@ -16,14 +13,15 @@ class CarTypeController extends Controller
     )
     {}
 
-    public function index() {
+    public function index(): \Illuminate\Http\JsonResponse
+    {
         $types = $this->carType->findAll();
         return ApiResponse::success([
-            'types' => $types
+            $types
         ], 'Fetched', 'Car Type');
     }
 
-    public function store(StoreCarTypeRequest $request)
+    public function store(StoreCarTypeRequest $request): \Illuminate\Http\JsonResponse
     {
         try {
             $carType = $this->carType->store($request->validated());
