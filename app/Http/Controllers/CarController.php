@@ -55,15 +55,15 @@ class CarController extends Controller
     public function delete($id)
     {
         try {
-            $brand = $this->car->delete($id);
+            $deleteCar = $this->car->delete($id);
             return ApiResponse::success([
-                'data' => $brand
+                'data' => $deleteCar
             ], 'Delete', 'Car');
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getMessage(), 'Delete', 'Car');
         }
     }
-    public function uploadImage(UploadFileRequest $request, $id)
+    public function uploadImage(UploadFileRequest $request, $id): \Illuminate\Http\JsonResponse
     {
         try {
             return $this->car->uploadImage($request->validated(), $id);

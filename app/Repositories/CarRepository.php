@@ -60,15 +60,13 @@ class CarRepository {
         }
     }
 
-    public function delete($car): bool
+    public function delete($id): bool
     {
         DB::beginTransaction();
         try {
-
+            $car = $this->findById($id);
             $this->uploadFile->deleteExistFile("cars/thumbnails/$car->image");
-
             DB::commit();
-
             return $car->delete();
         } catch (\Exception $e) {
             DB::rollBack();

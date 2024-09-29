@@ -19,7 +19,7 @@ class CarBrandController extends Controller
     public function index() {
         $brands = $this->carBrand->findAll();
         return ApiResponse::success([
-            'brands' => $brands
+            $brands
         ], 'Fetched', 'Car Brand');
     }
 
@@ -37,7 +37,7 @@ class CarBrandController extends Controller
     {
         $brand = $this->carBrand->findById($id);
         return ApiResponse::success([
-            'data' => $brand
+            $brand
         ], 'Fetched', 'Car Brand');
     }
     public function update(UpdateCarBrandRequest $request, $id)
@@ -62,5 +62,4 @@ class CarBrandController extends Controller
             return ApiResponse::error($exception->getMessage(), 'Delete', 'Car Brand');
         }
     }
-
 }

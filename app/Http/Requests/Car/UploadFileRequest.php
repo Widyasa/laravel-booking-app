@@ -24,7 +24,7 @@ class UploadFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_id' => 'required|numeric',
+//            'car_id' => 'required|numeric',
             'image' => 'required|file|image|mimes:png,jpg,jpeg,gif,webp,svg|max:5048'
         ];
     }

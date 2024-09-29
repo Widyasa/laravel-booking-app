@@ -35,7 +35,7 @@ class CarTypeController extends Controller
     {
         $type = $this->carType->findById($id);
         return ApiResponse::success([
-            'data' => $type
+            $type
         ], 'Fetched', 'Car Type');
     }
     public function update(UpdateCarTypeRequest $request, $id)
