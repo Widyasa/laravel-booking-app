@@ -115,7 +115,7 @@ class TransactionRepository {
                 $transaction->update($request);
                 DB::commit();
 
-                return ApiResponse::success([$transaction], 'Update', 'Payment Transaction');
+                return ApiResponse::success([$transaction], 'Updx   ate', 'Payment Transaction');
         } catch (\Exception $e) {
             DB::rollBack();
             logger($e->getMessage());

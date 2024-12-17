@@ -45,9 +45,7 @@ class CarController extends Controller
     {
         try {
             $car = $this->car->update($request->validated(), $id);
-            return ApiResponse::success([
-                'data' => $car
-            ], 'Update', 'Car');
+            return ApiResponse::success([$car], 'Update', 'Car');
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getMessage(), 'Update', 'Car');
         }

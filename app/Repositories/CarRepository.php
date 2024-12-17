@@ -45,13 +45,14 @@ class CarRepository {
         }
     }
 
-    public function update($request, $id): bool
+    public function update($request, $id): Car
     {
         DB::beginTransaction();
         try {
             DB::commit();
             $car = $this->findById($id);
-            return $car->update($request);
+            $car->update($request);
+            return $car;
         } catch (\Exception $e) {
             DB::rollBack();
             logger($e->getMessage());
